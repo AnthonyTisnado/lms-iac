@@ -1,0 +1,11 @@
+node_modules/
+dist/
+target/
+backend/.mvn/apache-maven-*/
+backend/.mvn/jdk/
+backend/.mvn/*.zip
+backend/.mvn/jdk-extract/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
