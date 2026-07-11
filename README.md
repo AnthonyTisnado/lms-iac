@@ -2,6 +2,10 @@
 
 Aplicacion web LMS con backend Spring Boot y frontend React. Usa las tablas existentes en Supabase PostgreSQL; el backend esta configurado con `spring.jpa.hibernate.ddl-auto=none`, por lo que no elimina ni recrea tablas.
 
+## Colaboracion
+
+Para trabajar en equipo, crea una rama para cada cambio, realiza commits descriptivos y abre un pull request antes de integrar las modificaciones en `main`.
+
 ## Tecnologias
 
 - Backend: Java 21, Spring Boot 3, Maven, Spring Web, Spring Data JPA, Spring Security, JWT, PostgreSQL Driver, Validation.
