@@ -15,3 +15,9 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "vpc_cidr" {
+  description = "Rango de direcciones de la VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
