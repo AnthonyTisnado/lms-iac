@@ -9,3 +9,11 @@ backend/.mvn/jdk-extract/
 .env
 .env.*
 !.env.example
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform.tfvars
+crash.log
