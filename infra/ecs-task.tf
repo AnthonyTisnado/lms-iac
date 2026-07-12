@@ -18,6 +18,16 @@ resource "aws_ecs_task_definition" "backend" {
           protocol      = "tcp"
         }
       ]
+      environment = [
+        {
+          name  = "DB_URL"
+          value = "jdbc:postgresql://${aws_db_instance.main.address}:${aws_db_instance.main.port}/${var.database_name}"
+        },
+        {
+          name  = "DB_USERNAME"
+          value = var.database_username
+        }
+      ]
       secrets = [
         {
           name      = "DB_PASSWORD"
