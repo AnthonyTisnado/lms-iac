@@ -21,3 +21,15 @@ variable "vpc_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
+
+variable "database_name" {
+  description = "Nombre de la base de datos del sistema"
+  type        = string
+  default     = "lmsiac"
+}
+
+variable "database_username" {
+  description = "Usuario administrador de PostgreSQL"
+  type        = string
+  default     = "lmsiac_admin"
+}
