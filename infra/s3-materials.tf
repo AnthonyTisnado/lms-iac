@@ -5,3 +5,12 @@ resource "aws_s3_bucket" "materials" {
     Name = "${var.project_name}-${var.environment}-materiales"
   }
 }
+
+resource "aws_s3_bucket_public_access_block" "materials" {
+  bucket = aws_s3_bucket.materials.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
