@@ -27,3 +27,8 @@ output "cognito_user_pool_id" {
   description = "Identificador del grupo de usuarios de Cognito"
   value       = aws_cognito_user_pool.main.id
 }
+
+output "cognito_client_id" {
+  description = "Identificador del cliente de Cognito"
+  value       = aws_cognito_user_pool_client.frontend.id
+}
