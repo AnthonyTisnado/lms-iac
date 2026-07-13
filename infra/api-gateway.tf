@@ -32,3 +32,13 @@ resource "aws_apigatewayv2_route" "backend" {
   route_key = "$default"
   target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
 }
+
+resource "aws_apigatewayv2_stage" "main" {
+  api_id      = aws_apigatewayv2_api.main.id
+  name        = "$default"
+  auto_deploy = true
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-api"
+  }
+}
