@@ -16,3 +16,13 @@ resource "aws_apigatewayv2_vpc_link" "main" {
     Name = "${var.project_name}-${var.environment}-vpc-link"
   }
 }
+
+resource "aws_apigatewayv2_integration" "backend" {
+  api_id                 = aws_apigatewayv2_api.main.id
+  integration_type       = "HTTP_PROXY"
+  integration_method     = "ANY"
+  integration_uri        = aws_lb_listener.http.arn
+  connection_type        = "VPC_LINK"
+  connection_id          = aws_apigatewayv2_vpc_link.main.id
+  payload_format_version = "1.0"
+}
