@@ -17,3 +17,8 @@ output "data_subnet_ids" {
   description = "Subredes privadas para RDS"
   value       = aws_subnet.data[*].id
 }
+
+output "api_url" {
+  description = "Direccion publica de API Gateway"
+  value       = aws_apigatewayv2_api.main.api_endpoint
+}
