@@ -2,6 +2,12 @@ resource "aws_apigatewayv2_api" "main" {
   name          = "${var.project_name}-${var.environment}-api"
   protocol_type = "HTTP"
 
+  cors_configuration {
+    allow_headers = ["authorization", "content-type"]
+    allow_methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    allow_origins = ["https://${aws_cloudfront_distribution.frontend.domain_name}"]
+  }
+
   tags = {
     Name = "${var.project_name}-${var.environment}-api"
   }
