@@ -26,3 +26,9 @@ resource "aws_apigatewayv2_integration" "backend" {
   connection_id          = aws_apigatewayv2_vpc_link.main.id
   payload_format_version = "1.0"
 }
+
+resource "aws_apigatewayv2_route" "backend" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
+}
