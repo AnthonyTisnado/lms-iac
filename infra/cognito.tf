@@ -31,3 +31,8 @@ resource "aws_apigatewayv2_authorizer" "cognito" {
     issuer   = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
   }
 }
+
+resource "aws_cognito_user_group" "administrator" {
+  name         = "ADMINISTRADOR"
+  user_pool_id = aws_cognito_user_pool.main.id
+}
