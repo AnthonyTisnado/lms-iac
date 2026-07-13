@@ -41,3 +41,8 @@ resource "aws_cognito_user_group" "professor" {
   name         = "PROFESOR"
   user_pool_id = aws_cognito_user_pool.main.id
 }
+
+resource "aws_cognito_user_group" "student" {
+  name         = "ALUMNO"
+  user_pool_id = aws_cognito_user_pool.main.id
+}
