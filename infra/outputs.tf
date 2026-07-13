@@ -22,3 +22,8 @@ output "api_url" {
   description = "Direccion publica de API Gateway"
   value       = aws_apigatewayv2_api.main.api_endpoint
 }
+
+output "cognito_user_pool_id" {
+  description = "Identificador del grupo de usuarios de Cognito"
+  value       = aws_cognito_user_pool.main.id
+}
