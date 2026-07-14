@@ -11,7 +11,19 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_extensions:/opt/sonarqube/extensions
 
+  jenkins:
+    image: jenkins/jenkins:2.568.1-lts-jdk21
+    container_name: lms-iac-jenkins
+    depends_on:
+      - sonarqube
+    ports:
+      - "8082:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
 volumes:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
+  jenkins_home:
