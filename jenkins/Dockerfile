@@ -10,4 +10,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-venv &&
 
 RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-29.6.1.tgz -o /tmp/docker.tgz && tar -xzf /tmp/docker.tgz -C /tmp docker/docker && mv /tmp/docker/docker /usr/local/bin/docker && rm -rf /tmp/docker /tmp/docker.tgz
 
+RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip && unzip -q /tmp/awscliv2.zip -d /tmp && /tmp/aws/install && rm -rf /tmp/aws /tmp/awscliv2.zip
+
 USER jenkins
