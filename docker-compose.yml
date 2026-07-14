@@ -12,7 +12,10 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
 
   jenkins:
-    image: jenkins/jenkins:2.568.1-lts-jdk21
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    image: lms-iac-jenkins:local
     container_name: lms-iac-jenkins
     depends_on:
       - sonarqube
