@@ -32,3 +32,8 @@ output "cognito_client_id" {
   description = "Identificador del cliente de Cognito"
   value       = aws_cognito_user_pool_client.frontend.id
 }
+
+output "ecr_backend_url" {
+  description = "Direccion del repositorio ECR del backend"
+  value       = aws_ecr_repository.backend.repository_url
+}
