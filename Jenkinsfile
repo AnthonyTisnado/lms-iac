@@ -18,5 +18,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Seguridad Terraform') {
+            steps {
+                dir('infra') {
+                    sh 'checkov -d . --framework terraform --compact --quiet --soft-fail'
+                }
+            }
+        }
     }
 }
