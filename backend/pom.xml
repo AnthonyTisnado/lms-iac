@@ -15,6 +15,9 @@
     <name>LMSIAC Backend</name>
     <properties>
         <java.version>21</java.version>
+        <sonar.projectKey>lms-iac-backend</sonar.projectKey>
+        <sonar.projectName>LMS IaC Backend</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
     <dependencies>
         <dependency>
