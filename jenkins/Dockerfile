@@ -6,4 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends maven && rm -rf
 
 RUN curl -fsSL https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip -o /tmp/terraform.zip && unzip /tmp/terraform.zip -d /usr/local/bin && rm /tmp/terraform.zip
 
+RUN apt-get update && apt-get install -y --no-install-recommends python3-venv && python3 -m venv /opt/checkov && /opt/checkov/bin/pip install --no-cache-dir checkov && ln -s /opt/checkov/bin/checkov /usr/local/bin/checkov && rm -rf /var/lib/apt/lists/*
+
 USER jenkins
