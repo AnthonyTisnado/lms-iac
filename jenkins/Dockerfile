@@ -8,4 +8,6 @@ RUN curl -fsSL https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_
 
 RUN apt-get update && apt-get install -y --no-install-recommends python3-venv && python3 -m venv /opt/checkov && /opt/checkov/bin/pip install --no-cache-dir checkov && ln -s /opt/checkov/bin/checkov /usr/local/bin/checkov && rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-29.6.1.tgz -o /tmp/docker.tgz && tar -xzf /tmp/docker.tgz -C /tmp docker/docker && mv /tmp/docker/docker /usr/local/bin/docker && rm -rf /tmp/docker /tmp/docker.tgz
+
 USER jenkins
