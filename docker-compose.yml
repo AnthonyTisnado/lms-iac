@@ -12,7 +12,10 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
 
   jenkins:
-    image: jenkins/jenkins:2.568.1-lts-jdk21
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    image: lms-iac-jenkins:local
     container_name: lms-iac-jenkins
     depends_on:
       - sonarqube
@@ -21,6 +24,12 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+
+  grafana:
+    image: grafana/grafana:12.1.1
+    container_name: lms-iac-grafana
+    ports:
+      - "3000:3000"
 
 volumes:
   sonarqube_data:

@@ -12,6 +12,10 @@ resource "aws_vpc" "main" {
   }
 }
 
+resource "aws_default_security_group" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
