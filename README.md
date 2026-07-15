@@ -1,194 +1,153 @@
 # LMSIAC
 
-Aplicacion web LMS con backend Spring Boot y frontend React. Usa las tablas existentes en Supabase PostgreSQL; el backend esta configurado con `spring.jpa.hibernate.ddl-auto=none`, por lo que no elimina ni recrea tablas.
+## Descripción del proyecto
 
-## Tecnologias
+LMSIAC es una plataforma web de gestión de aprendizaje orientada a instituciones educativas que necesitan centralizar cursos, clases, tareas, evaluaciones, archivos académicos y sesiones en vivo. El sistema está dirigido a administradores, profesores y alumnos, permitiendo organizar la información académica de manera ordenada, segura y accesible desde un entorno web.
 
-- Backend: Java 21, Spring Boot 3, Maven, Spring Web, Spring Data JPA, Spring Security, JWT, PostgreSQL Driver, Validation.
-- Frontend: React, Vite, TypeScript, Tailwind CSS, Axios, React Router.
-- Base de datos: Supabase PostgreSQL.
+Actualmente, muchas instituciones gestionan sus cursos mediante herramientas separadas como hojas de cálculo, carpetas compartidas, enlaces externos y canales de comunicación no centralizados. Esto genera duplicidad de información, pérdida de evidencias, dificultad para monitorear tareas y evaluaciones, y poca trazabilidad sobre el avance académico de los estudiantes.
 
+La propuesta LMSIAC busca resolver esta problemática mediante una plataforma LMS con arquitectura orientada a la nube, donde los usuarios puedan acceder según su rol, los profesores puedan administrar sus clases, tareas y evaluaciones, y los alumnos puedan consultar materiales, entregar actividades y visualizar sus calificaciones.
 
-## Supabase Storage
+El proyecto funciona como una aplicación web compuesta por frontend, backend, base de datos, almacenamiento de archivos e infraestructura cloud. Para la propuesta de arquitectura de la primera unidad, se plantea una arquitectura objetivo sobre Amazon Web Services AWS, considerando disponibilidad, escalabilidad, seguridad, tolerancia a fallos, recuperación ante errores y observabilidad.
 
-Crear un bucket llamado `lmsiac` en Supabase Storage. Para URLs publicas, configura el bucket como publico o agrega politicas de lectura compatibles con tu proyecto. La `service role key` solo se usa en backend mediante variables de entorno y no debe exponerse en frontend.
+---
 
-Endpoint de subida:
+## Problemática
 
-```http
-POST /api/files/upload
-Authorization: Bearer TOKEN
-Content-Type: multipart/form-data
+Las instituciones educativas requieren plataformas digitales que permitan gestionar procesos académicos de forma segura y centralizada. Sin embargo, cuando la información se encuentra distribuida en diferentes herramientas, se presentan problemas como:
 
-file=<archivo>
-folder=sesiones|tareas|entregas
-```
+- Dificultad para controlar usuarios, roles y permisos.
+- Pérdida o desorden de materiales académicos.
+- Falta de trazabilidad en tareas, entregas y evaluaciones.
+- Riesgo de exposición de información académica sensible.
+- Baja disponibilidad cuando los servicios no están preparados para alta demanda.
+- Ausencia de monitoreo ante errores, caídas o fallos parciales.
+- Dificultad para integrar clases en vivo, archivos y calificaciones en una sola plataforma.
 
-Respuesta:
+Por ello, LMSIAC propone una solución cloud que permita administrar los procesos académicos principales de manera segura, escalable y tolerante a fallos.
 
-```json
-{
-  "url": "https://...",
-  "path": "sesiones/..."
-}
-```
+---
 
-Tipos permitidos: `pdf`, `doc`, `docx`, `ppt`, `pptx`, `xls`, `xlsx`, `jpg`, `jpeg`, `png`, `mp4`. Tamano maximo: 10MB. Archivos peligrosos como `exe`, `bat`, `cmd`, `js` y `sh` son rechazados.
+## Objetivo del proyecto
 
-Flujo de prueba de archivos:
+Diseñar e implementar una plataforma LMS web con arquitectura cloud en AWS, que permita gestionar cursos, clases, usuarios, tareas, evaluaciones, archivos académicos y clases en vivo, priorizando atributos de calidad como seguridad, disponibilidad, escalabilidad, rendimiento, recuperabilidad y observabilidad.
 
-1. Login como profesor.
-2. Crear una sesion subiendo un PDF como material.
-3. Login como alumno y abrir el material.
-4. Login como profesor y crear una tarea con archivo.
-5. Login como alumno, abrir la tarea y subir entrega.
-6. Login como profesor, abrir la entrega y calificar.
+---
 
-## Modulos Semanales
+## Público objetivo
 
-LMSIAC incluye una vista de curso tipo LMS universitario, organizada por semanas y recursos. Antes de usarla en Supabase ejecuta la migracion no destructiva:
+El sistema está orientado a:
 
-```sql
-backend/migrations/001_modulos_clase.sql
-```
+- Administradores académicos.
+- Profesores.
+- Alumnos.
+- Instituciones educativas que requieren una plataforma LMS centralizada.
 
-La migracion crea:
+---
 
-- `modulos_clase`
-- `recursos_modulo`
-- columna opcional `tareas.modulo_id`
+## Tecnologías del prototipo
 
-Endpoints profesor:
+### Backend
 
-- `GET /api/profesor/clases/{claseId}/modulos`
-- `POST /api/profesor/clases/{claseId}/modulos`
-- `PUT /api/profesor/modulos/{moduloId}`
-- `DELETE /api/profesor/modulos/{moduloId}`
-- `PATCH /api/profesor/modulos/{moduloId}/visible`
-- `GET /api/profesor/modulos/{moduloId}/recursos`
-- `POST /api/profesor/modulos/{moduloId}/recursos`
-- `PUT /api/profesor/recursos/{recursoId}`
-- `DELETE /api/profesor/recursos/{recursoId}`
-- `PATCH /api/profesor/recursos/{recursoId}/visible`
+- Java 21
+- Spring Boot 3
+- Spring Web
+- Spring Security
+- Spring Data JPA
+- JWT
+- Maven
+- PostgreSQL Driver
 
-Endpoint alumno:
+### Frontend
 
-- `GET /api/alumno/clases/{claseId}/modulos`
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
+- Axios
+- React Router
 
-Rutas frontend:
+### Base de datos del prototipo
 
-- Profesor: `/profesor/clases/:id/curso`
-- Alumno: `/alumno/clases/:id/curso`
-- Visor PDF: `/viewer/pdf?title=&url=`
+- Supabase PostgreSQL
 
-Para subir recursos de modulo se usa Supabase Storage con folder `recursos`.
+### Infraestructura propuesta
 
-## Ejecutar backend
+- Amazon Web Services AWS
+- Terraform
+- Docker
+- GitHub Actions
+- Checkov
+- CloudWatch
 
-```powershell
-cd backend
-mvn spring-boot:run
-```
+---
 
-El backend corre en `http://localhost:8080`.
+## Arquitectura objetivo en AWS
 
-## Ejecutar frontend
+La arquitectura propuesta para LMSIAC se organiza por capas: acceso, seguridad, frontend, APIs, microservicios, datos, archivos, streaming, eventos y monitoreo.
 
-```powershell
-cd frontend
-npm install
-npm run dev
-```
+```mermaid
+flowchart TB
+    U[Usuarios<br/>Administrador, Profesor, Alumno]
 
-El frontend corre en `http://localhost:5173`.
+    U --> R53[Amazon Route 53<br/>DNS]
+    R53 --> CF[Amazon CloudFront<br/>Distribución del frontend]
+    CF --> WAF[AWS WAF<br/>Protección web]
+    WAF --> FE[Amazon S3 / AWS Amplify<br/>Frontend React]
 
-Opcionalmente puedes definir `VITE_API_URL` si el backend no esta en `http://localhost:8080/api`.
+    FE --> APIGW[Amazon API Gateway<br/>Entrada segura a APIs]
+    APIGW --> COG[Amazon Cognito<br/>Autenticación y roles]
 
-## Crear primer administrador
+    APIGW --> ALB[Application Load Balancer]
 
-Ejecuta una sola vez, antes de que exista cualquier usuario con rol `ADMINISTRADOR`:
+    subgraph VPC[Amazon VPC]
+        subgraph PRIV[Subredes privadas Multi-AZ]
+            ECS[Amazon ECS Fargate<br/>Microservicios LMSIAC]
+            AUTH[MS Usuarios y Roles]
+            ACADEMIC[MS Académico]
+            TASKS[MS Tareas]
+            EXAMS[MS Evaluaciones]
+            FILES[MS Archivos]
+            STREAM[MS Streaming]
+            NOTIF[MS Notificaciones]
+        end
 
-```http
-POST http://localhost:8080/api/setup/admin
-Content-Type: application/json
+        subgraph DATA[Subredes privadas de datos]
+            RDS[(Amazon RDS PostgreSQL Multi-AZ)]
+        end
+    end
 
-{
-  "nombres": "Admin",
-  "apellidos": "LMSIAC",
-  "email": "admin@lms.com",
-  "password": "123456"
-}
-```
+    ALB --> ECS
+    ECS --> AUTH
+    ECS --> ACADEMIC
+    ECS --> TASKS
+    ECS --> EXAMS
+    ECS --> FILES
+    ECS --> STREAM
+    ECS --> NOTIF
 
-El endpoint rechaza la solicitud si ya existe un administrador.
+    AUTH --> RDS
+    ACADEMIC --> RDS
+    TASKS --> RDS
+    EXAMS --> RDS
+    NOTIF --> RDS
 
-## Login
+    FILES --> S3FILES[Amazon S3<br/>Materiales, tareas y entregas]
+    STREAM --> KVS[Amazon Kinesis Video Streams<br/>Clases en vivo]
 
-```http
-POST http://localhost:8080/api/auth/login
-Content-Type: application/json
+    S3FILES --> LAMBDA1[AWS Lambda<br/>Procesamiento de archivos]
+    STREAM --> EVENT[Amazon EventBridge<br/>Eventos programados]
+    EVENT --> LAMBDA2[AWS Lambda<br/>Recordatorios y auditoría]
+    LAMBDA2 --> SNS[Amazon SNS / SES<br/>Notificaciones]
 
-{
-  "email": "admin@lms.com",
-  "password": "123456"
-}
-```
+    ECS --> SM[AWS Secrets Manager<br/>Credenciales seguras]
 
-Respuesta:
+    APIGW --> CW[Amazon CloudWatch<br/>Logs, métricas y alarmas]
+    ECS --> CW
+    RDS --> CW
+    KVS --> CW
+    LAMBDA1 --> CW
+    LAMBDA2 --> CW
+    CW --> SNS
 
-```json
-{
-  "token": "...",
-  "usuario": {
-    "id": 1,
-    "nombres": "Admin",
-    "apellidos": "LMSIAC",
-    "email": "admin@lms.com",
-    "rol": "ADMINISTRADOR",
-    "estado": true
-  }
-}
-```
-
-## Endpoints principales
-
-- Publicos: `POST /api/auth/login`, `POST /api/setup/admin`.
-- Administrador: usuarios, roles, cursos, clases, alumnos por clase, alumnos disponibles, dashboard y reportes en `/api/admin/**`.
-- Profesor: clases asignadas, sesiones, tareas, entregas, examenes, preguntas, opciones y streaming en `/api/profesor/**`.
-- Alumno: clases matriculadas, sesiones, tareas, entregas, examenes, respuestas, streaming y notas en `/api/alumno/**`.
-
-Endpoints admin agregados:
-
-- `PATCH /api/admin/clases/{id}/estado`
-- `GET /api/admin/clases/{claseId}/alumnos`
-- `GET /api/admin/alumnos-disponibles/{claseId}`
-- `GET /api/admin/reportes`
-
-Endpoints profesor agregados o completados:
-
-- `GET /api/profesor/dashboard`
-- `GET /api/profesor/clases/{claseId}/alumnos`
-- `GET /api/profesor/clases/{claseId}/personas`
-- `PUT /api/profesor/examenes/{id}`
-- `DELETE /api/profesor/examenes/{id}`
-- `PUT /api/profesor/preguntas/{id}`
-- `DELETE /api/profesor/preguntas/{id}`
-- `PUT /api/profesor/opciones/{id}`
-- `DELETE /api/profesor/opciones/{id}`
-- `PATCH /api/profesor/streaming/{id}/estado`
-
-Endpoints alumno agregados o completados:
-
-- `GET /api/alumno/dashboard`
-- `GET /api/alumno/clases/{claseId}/personas`
-- `PUT /api/alumno/entregas/{entregaId}`
-
-Endpoint admin agregado:
-
-- `GET /api/admin/clases/{claseId}/personas`
-
-## Roles
-
-- `ADMINISTRADOR`: gestiona usuarios, roles, cursos, clases, asignacion de profesores y matricula de alumnos.
-- `PROFESOR`: gestiona solo sus clases asignadas, sesiones, tareas, entregas, examenes y clases en vivo.
-- `ALUMNO`: ve solo clases donde esta matriculado, revisa materiales, entrega tareas, responde examenes y accede a streaming.
+    RDS --> BACKUP[AWS Backup / RDS Backups]
