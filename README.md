@@ -8,21 +8,6 @@ Aplicacion web LMS con backend Spring Boot y frontend React. Usa las tablas exis
 - Frontend: React, Vite, TypeScript, Tailwind CSS, Axios, React Router.
 - Base de datos: Supabase PostgreSQL.
 
-## Variables de entorno backend
-
-Configura estas variables antes de ejecutar:
-
-```powershell
-$env:DB_URL="jdbc:postgresql://HOST:5432/postgres"
-$env:DB_USERNAME="postgres"
-$env:DB_PASSWORD="TU_PASSWORD"
-$env:JWT_SECRET="usa-una-clave-secreta-de-al-menos-32-caracteres"
-$env:SUPABASE_URL="https://TU_PROYECTO.supabase.co"
-$env:SUPABASE_SERVICE_ROLE_KEY="TU_SERVICE_ROLE_KEY"
-$env:SUPABASE_STORAGE_BUCKET="lmsiac"
-```
-
-No coloques credenciales reales en el codigo.
 
 ## Supabase Storage
 
