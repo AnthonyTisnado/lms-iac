@@ -1,0 +1,35 @@
+name: Pipeline CI/CD LMS
+
+run-name: ${{ github.actor }} ejecutando pipeline LMS
+
+on: [push, workflow_dispatch]
+
+jobs:
+  pipeline-lms:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inicio
+        run: echo "Pipeline iniciado por ${{ github.event_name }}"
+
+      - name: Informacion del repositorio
+        run: echo "Rama ${{ github.ref_name }} - Repositorio ${{ github.repository }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Listar archivos del repositorio
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: Validar codigo LMS
+        run: echo "Validando codigo de los microservicios LMS"
+
+      - name: Ejecutar pruebas LMS
+        run: echo "Ejecutando pruebas del sistema LMS"
+
+      - name: Construir Docker
+        run: echo "Construyendo imagenes Docker del LMS"
+
+      - name: Amazon ECR
+        run: echo "Publicando imagenes Docker en Amazon ECR"
