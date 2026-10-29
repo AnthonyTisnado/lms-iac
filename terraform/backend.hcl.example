@@ -1,0 +1,5 @@
+bucket       = "lms-terraform-state-grupo8-2026-ohio"
+key          = "lab09/dev/terraform.tfstate"
+region       = "us-east-2"
+encrypt      = true
+use_lockfile = true
