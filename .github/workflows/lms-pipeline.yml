@@ -33,3 +33,14 @@ jobs:
 
       - name: Amazon ECR
         run: echo "Publicando imagenes Docker en Amazon ECR"
+        
+      - name: Test variables AWS
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+        run: |
+          echo "Region: $AWS_REGION"
+          echo "Rol IAM configurado: ${AWS_ROLE_ARN:+SI}"
+          echo "Bucket Terraform: $TF_STATE_BUCKET"
+        
