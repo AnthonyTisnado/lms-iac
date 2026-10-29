@@ -1,0 +1,64 @@
+name: Laboratorio Terraform Grupo 8
+on:
+  push:
+    branches: [development]
+    paths: ['terraform/**', '.github/workflows/lab09-grupo8.yml']
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: lab09-grupo8-dev
+  cancel-in-progress: false
+jobs:
+  laboratorio:
+    runs-on: ubuntu-latest
+    environment: dev
+    defaults:
+      run:
+        working-directory: terraform
+    env:
+      TF_IN_AUTOMATION: 'true'
+      TF_INPUT: 'false'
+      TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.13.5'
+          terraform_wrapper: false
+      - name: Comprobar region
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+        run: test "$AWS_REGION" = us-east-2
+      - name: Autenticar con OIDC
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          allowed-account-ids: '637423561860'
+      - name: Terraform init
+        id: init
+        env:
+          TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+        run: terraform init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="region=$AWS_REGION" -backend-config="key=lab09/dev/terraform.tfstate" -backend-config="encrypt=true" -backend-config="use_lockfile=true"
+      - name: Terraform fmt y validate
+        run: |
+          terraform fmt -check
+          terraform validate
+      - name: Terraform plan
+        run: terraform plan -lock-timeout=120s -out=lab.tfplan
+      - name: Terraform apply
+        run: terraform apply -lock-timeout=120s -auto-approve lab.tfplan
+      - name: Comprobar Lambda
+        run: |
+          aws lambda invoke --function-name "$(terraform output -raw lambda_name)" --cli-binary-format raw-in-base64-out --payload '{}' response.json > invoke.json
+          python3 -c 'import json; r=json.load(open("invoke.json")); p=json.load(open("response.json")); assert "FunctionError" not in r and p["statusCode"] == 200; print(p)'
+      - name: Terraform destroy
+        if: ${{ always() && steps.init.outcome == 'success' }}
+        run: terraform destroy -lock-timeout=120s -auto-approve
+      - name: Verificar estado vacio
+        if: ${{ always() && steps.init.outcome == 'success' }}
+        run: |
+          terraform state list > remaining.txt
+          test ! -s remaining.txt
