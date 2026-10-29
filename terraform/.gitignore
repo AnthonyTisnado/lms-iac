@@ -1,0 +1,8 @@
+.terraform/
+backend.hcl
+*.tfstate*
+*.tfplan
+handler.zip
+response.json
+invoke.json
+remaining.txt
